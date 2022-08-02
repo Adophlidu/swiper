@@ -34,35 +34,38 @@
     }
     .swiper-container {
         width: 100%;
-        height: 300px;
+        /* height: 300px; */
         margin: 50px auto;
     }
     .swiper-slide {
         background: #f1f1f1;
         color:#000;
         text-align: center;
-        line-height: 300px;
+        /* line-height: 300px; */
     }
     </style>
     <script src="../build/js/swiper.js"></script>
     <script>
         var swiper = new Swiper({
             el: '.swiper-container',
-            initialSlide: 2,
-            spaceBetween: 50,
-            slidesPerView: 2,
-            centeredSlides: true,
-            slideToClickedSlide: true,
-            grabCursor: true,
-            scrollbar: {
-              el: '.swiper-scrollbar',
-            },
-            mousewheel: {
-              enabled: true,
-            },
-            keyboard: {
-              enabled: true,
-            },
+            slidesPerView: 3,
+            spaceBetween: 30,
+            aspectRatio: 1.56, // 宽高比
+            // initialSlide: 2,
+            // spaceBetween: 50,
+            // slidesPerView: 2,
+            // centeredSlides: true,
+            // slideToClickedSlide: true,
+            // grabCursor: true,
+            // scrollbar: {
+            //   el: '.swiper-scrollbar',
+            // },
+            // mousewheel: {
+            //   enabled: true,
+            // },
+            // keyboard: {
+            //   enabled: true,
+            // },
             pagination: {
               el: '.swiper-pagination',
             },

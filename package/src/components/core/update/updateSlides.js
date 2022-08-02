@@ -174,6 +174,10 @@ export default function () {
       if (slides[i]) {
         if (swiper.isHorizontal()) {
           slides[i].style.width = `${slideSize}px`;
+          if (!Number.isNaN(+params.aspectRatio)) {
+            const height = (slideSize / params.aspectRatio).toFixed(2);
+            slides[i].style.height = `${height}px`;
+          }
         } else {
           slides[i].style.height = `${slideSize}px`;
         }
@@ -183,7 +187,6 @@ export default function () {
       slides[i].swiperSlideSize = slideSize;
     }
     slidesSizesGrid.push(slideSize);
-
 
     if (params.centeredSlides) {
       slidePosition = slidePosition + (slideSize / 2) + (prevSlideSize / 2) + spaceBetween;

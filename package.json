@@ -1,7 +1,7 @@
 {
-  "name": "swiper-src",
+  "name": "ratio-swiper",
   "version": "5.4.1",
-  "description": "Most modern mobile touch slider and framework with hardware accelerated transitions",
+  "description": "updated from swiper that support aspect ratio for swiper slide",
   "scripts": {
     "build:dev": "cross-env NODE_ENV=development gulp build",
     "build:prod": "cross-env NODE_ENV=production gulp build",
@@ -21,6 +21,7 @@
     "swipe",
     "slider",
     "touch",
+    "aspect ratio",
     "ios",
     "mobile",
     "cordova",
@@ -32,16 +33,9 @@
     "gallery",
     "plugin"
   ],
-  "author": "Vladimir Kharlampidi",
+  "author": "Adolph",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/nolimits4web/Swiper/issues"
-  },
-  "homepage": "http://swiperjs.com",
-  "funding": {
-    "type": "patreon",
-    "url": "https://www.patreon.com/vladimirkharlampidi"
-  },
+  "homepage": "https://github.com/Adophlidu/swiper",
   "engines": {
     "node": ">= 4.7.0"
   },

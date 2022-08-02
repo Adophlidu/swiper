@@ -1,13 +1,13 @@
 /**
  * Swiper 5.4.1
- * Most modern mobile touch slider and framework with hardware accelerated transitions
- * http://swiperjs.com
+ * updated from swiper that support aspect ratio for swiper slide
+ * https://github.com/Adophlidu/swiper
  *
- * Copyright 2014-2020 Vladimir Kharlampidi
+ * Copyright 2014-2022 Adolph
  *
  * Released under the MIT License
  *
- * Released on: May 20, 2020
+ * Released on: August 2, 2022
  */
 
 import { $, addClass, removeClass, hasClass, toggleClass, attr, removeAttr, data, transform, transition as transition$1, on, off, trigger, transitionEnd as transitionEnd$1, outerWidth, outerHeight, offset, css, each, html, text, is, index, eq, append, prepend, next, nextAll, prev, prevAll, parent, parents, closest, find, children, filter, remove, add, styles } from 'dom7/dist/dom7.modular';
@@ -166,7 +166,7 @@ const Utils = {
   },
 };
 
-const Support = (function Support() {
+const Support$1 = (function Support() {
   return {
     touch: !!(('ontouchstart' in window) || (window.DocumentTouch && document$1 instanceof window.DocumentTouch)),
 
@@ -571,6 +571,10 @@ function updateSlides () {
       if (slides[i]) {
         if (swiper.isHorizontal()) {
           slides[i].style.width = `${slideSize}px`;
+          if (!Number.isNaN(+params.aspectRatio)) {
+            const height = (slideSize / params.aspectRatio).toFixed(2);
+            slides[i].style.height = `${height}px`;
+          }
         } else {
           slides[i].style.height = `${slideSize}px`;
         }
@@ -580,7 +584,6 @@ function updateSlides () {
       slides[i].swiperSlideSize = slideSize;
     }
     slidesSizesGrid.push(slideSize);
-
 
     if (params.centeredSlides) {
       slidePosition = slidePosition + (slideSize / 2) + (prevSlideSize / 2) + spaceBetween;
@@ -1405,9 +1408,9 @@ function slidePrev (speed = this.params.speed, runCallbacks = true, internal) {
   }
   const normalizedTranslate = normalize(translate);
   const normalizedSnapGrid = snapGrid.map((val) => normalize(val));
-  const normalizedSlidesGrid = slidesGrid.map((val) => normalize(val));
+  slidesGrid.map((val) => normalize(val));
 
-  const currentSnap = snapGrid[normalizedSnapGrid.indexOf(normalizedTranslate)];
+  snapGrid[normalizedSnapGrid.indexOf(normalizedTranslate)];
   let prevSnap = snapGrid[normalizedSnapGrid.indexOf(normalizedTranslate) - 1];
   if (typeof prevSnap === 'undefined' && params.cssMode) {
     snapGrid.forEach((snap) => {
@@ -1611,7 +1614,7 @@ var loop = {
 
 function setGrabCursor (moving) {
   const swiper = this;
-  if (Support.touch || !swiper.params.simulateTouch || (swiper.params.watchOverflow && swiper.isLocked) || swiper.params.cssMode) return;
+  if (Support$1.touch || !swiper.params.simulateTouch || (swiper.params.watchOverflow && swiper.isLocked) || swiper.params.cssMode) return;
   const el = swiper.el;
   el.style.cursor = 'move';
   el.style.cursor = moving ? '-webkit-grabbing' : '-webkit-grab';
@@ -1621,7 +1624,7 @@ function setGrabCursor (moving) {
 
 function unsetGrabCursor () {
   const swiper = this;
-  if (Support.touch || (swiper.params.watchOverflow && swiper.isLocked) || swiper.params.cssMode) return;
+  if (Support$1.touch || (swiper.params.watchOverflow && swiper.isLocked) || swiper.params.cssMode) return;
   swiper.el.style.cursor = '';
 }
 
@@ -1646,7 +1649,7 @@ function appendSlide (slides) {
   if (params.loop) {
     swiper.loopCreate();
   }
-  if (!(params.observer && Support.observer)) {
+  if (!(params.observer && Support$1.observer)) {
     swiper.update();
   }
 }
@@ -1670,7 +1673,7 @@ function prependSlide (slides) {
   if (params.loop) {
     swiper.loopCreate();
   }
-  if (!(params.observer && Support.observer)) {
+  if (!(params.observer && Support$1.observer)) {
     swiper.update();
   }
   swiper.slideTo(newActiveIndex, 0, false);
@@ -1719,7 +1722,7 @@ function addSlide (index, slides) {
   if (params.loop) {
     swiper.loopCreate();
   }
-  if (!(params.observer && Support.observer)) {
+  if (!(params.observer && Support$1.observer)) {
     swiper.update();
   }
   if (params.loop) {
@@ -1760,7 +1763,7 @@ function removeSlide (slidesIndexes) {
     swiper.loopCreate();
   }
 
-  if (!(params.observer && Support.observer)) {
+  if (!(params.observer && Support$1.observer)) {
     swiper.update();
   }
   if (params.loop) {
@@ -1788,7 +1791,7 @@ var manipulation = {
   removeAllSlides,
 };
 
-const Device = (function Device() {
+const Device$1 = (function Device() {
   const platform = window.navigator.platform;
   const ua = window.navigator.userAgent;
 
@@ -1827,7 +1830,7 @@ const Device = (function Device() {
   // iPadOs 13 fix
   if (!ipad
     && macos
-    && Support.touch
+    && Support$1.touch
     && (
       (screenWidth === 1024 && screenHeight === 1366) // Pro 12.9
       || (screenWidth === 834 && screenHeight === 1194) // Pro 11
@@ -2581,15 +2584,15 @@ function attachEvents() {
   const capture = !!params.nested;
 
   // Touch Events
-  if (!Support.touch && Support.pointerEvents) {
+  if (!Support$1.touch && Support$1.pointerEvents) {
     el.addEventListener(touchEvents.start, swiper.onTouchStart, false);
     document$1.addEventListener(touchEvents.move, swiper.onTouchMove, capture);
     document$1.addEventListener(touchEvents.end, swiper.onTouchEnd, false);
   } else {
-    if (Support.touch) {
-      const passiveListener = touchEvents.start === 'touchstart' && Support.passiveListener && params.passiveListeners ? { passive: true, capture: false } : false;
+    if (Support$1.touch) {
+      const passiveListener = touchEvents.start === 'touchstart' && Support$1.passiveListener && params.passiveListeners ? { passive: true, capture: false } : false;
       el.addEventListener(touchEvents.start, swiper.onTouchStart, passiveListener);
-      el.addEventListener(touchEvents.move, swiper.onTouchMove, Support.passiveListener ? { passive: false, capture } : capture);
+      el.addEventListener(touchEvents.move, swiper.onTouchMove, Support$1.passiveListener ? { passive: false, capture } : capture);
       el.addEventListener(touchEvents.end, swiper.onTouchEnd, passiveListener);
       if (touchEvents.cancel) {
         el.addEventListener(touchEvents.cancel, swiper.onTouchEnd, passiveListener);
@@ -2599,7 +2602,7 @@ function attachEvents() {
         dummyEventAttached = true;
       }
     }
-    if ((params.simulateTouch && !Device.ios && !Device.android) || (params.simulateTouch && !Support.touch && Device.ios)) {
+    if ((params.simulateTouch && !Device$1.ios && !Device$1.android) || (params.simulateTouch && !Support$1.touch && Device$1.ios)) {
       el.addEventListener('mousedown', swiper.onTouchStart, false);
       document$1.addEventListener('mousemove', swiper.onTouchMove, capture);
       document$1.addEventListener('mouseup', swiper.onTouchEnd, false);
@@ -2615,7 +2618,7 @@ function attachEvents() {
 
   // Resize handler
   if (params.updateOnWindowResize) {
-    swiper.on((Device.ios || Device.android ? 'resize orientationchange observerUpdate' : 'resize observerUpdate'), onResize, true);
+    swiper.on((Device$1.ios || Device$1.android ? 'resize orientationchange observerUpdate' : 'resize observerUpdate'), onResize, true);
   } else {
     swiper.on('observerUpdate', onResize, true);
   }
@@ -2631,13 +2634,13 @@ function detachEvents() {
   const capture = !!params.nested;
 
   // Touch Events
-  if (!Support.touch && Support.pointerEvents) {
+  if (!Support$1.touch && Support$1.pointerEvents) {
     el.removeEventListener(touchEvents.start, swiper.onTouchStart, false);
     document$1.removeEventListener(touchEvents.move, swiper.onTouchMove, capture);
     document$1.removeEventListener(touchEvents.end, swiper.onTouchEnd, false);
   } else {
-    if (Support.touch) {
-      const passiveListener = touchEvents.start === 'onTouchStart' && Support.passiveListener && params.passiveListeners ? { passive: true, capture: false } : false;
+    if (Support$1.touch) {
+      const passiveListener = touchEvents.start === 'onTouchStart' && Support$1.passiveListener && params.passiveListeners ? { passive: true, capture: false } : false;
       el.removeEventListener(touchEvents.start, swiper.onTouchStart, passiveListener);
       el.removeEventListener(touchEvents.move, swiper.onTouchMove, capture);
       el.removeEventListener(touchEvents.end, swiper.onTouchEnd, passiveListener);
@@ -2645,7 +2648,7 @@ function detachEvents() {
         el.removeEventListener(touchEvents.cancel, swiper.onTouchEnd, passiveListener);
       }
     }
-    if ((params.simulateTouch && !Device.ios && !Device.android) || (params.simulateTouch && !Support.touch && Device.ios)) {
+    if ((params.simulateTouch && !Device$1.ios && !Device$1.android) || (params.simulateTouch && !Support$1.touch && Device$1.ios)) {
       el.removeEventListener('mousedown', swiper.onTouchStart, false);
       document$1.removeEventListener('mousemove', swiper.onTouchMove, capture);
       document$1.removeEventListener('mouseup', swiper.onTouchEnd, false);
@@ -2661,7 +2664,7 @@ function detachEvents() {
   }
 
   // Resize handler
-  swiper.off((Device.ios || Device.android ? 'resize orientationchange observerUpdate' : 'resize observerUpdate'), onResize);
+  swiper.off((Device$1.ios || Device$1.android ? 'resize orientationchange observerUpdate' : 'resize observerUpdate'), onResize);
 }
 
 var events = {
@@ -2787,10 +2790,10 @@ function addClasses () {
       suffixes.push('multirow-column');
     }
   }
-  if (Device.android) {
+  if (Device$1.android) {
     suffixes.push('android');
   }
-  if (Device.ios) {
+  if (Device$1.ios) {
     suffixes.push('ios');
   }
 
@@ -3193,7 +3196,7 @@ class Swiper extends SwiperClass {
       touchEvents: (function touchEvents() {
         const touch = ['touchstart', 'touchmove', 'touchend', 'touchcancel'];
         let desktop = ['mousedown', 'mousemove', 'mouseup'];
-        if (Support.pointerEvents) {
+        if (Support$1.pointerEvents) {
           desktop = ['pointerdown', 'pointermove', 'pointerup'];
         }
         swiper.touchEventsTouch = {
@@ -3207,7 +3210,7 @@ class Swiper extends SwiperClass {
           move: desktop[1],
           end: desktop[2],
         };
-        return Support.touch || !swiper.params.simulateTouch ? swiper.touchEventsTouch : swiper.touchEventsDesktop;
+        return Support$1.touch || !swiper.params.simulateTouch ? swiper.touchEventsTouch : swiper.touchEventsDesktop;
       }()),
       touchEventsData: {
         isTouched: undefined,
@@ -3502,27 +3505,27 @@ class Swiper extends SwiperClass {
   }
 }
 
-var Device$1 = {
+var Device = {
   name: 'device',
   proto: {
-    device: Device,
+    device: Device$1,
   },
   static: {
-    device: Device,
+    device: Device$1,
   },
 };
 
-var Support$1 = {
+var Support = {
   name: 'support',
   proto: {
-    support: Support,
+    support: Support$1,
   },
   static: {
-    support: Support,
+    support: Support$1,
   },
 };
 
-const Browser = (function Browser() {
+const Browser$1 = (function Browser() {
   function isSafari() {
     const ua = window.navigator.userAgent.toLowerCase();
     return (ua.indexOf('safari') >= 0 && ua.indexOf('chrome') < 0 && ua.indexOf('android') < 0);
@@ -3534,13 +3537,13 @@ const Browser = (function Browser() {
   };
 }());
 
-var Browser$1 = {
+var Browser = {
   name: 'browser',
   proto: {
-    browser: Browser,
+    browser: Browser$1,
   },
   static: {
-    browser: Browser,
+    browser: Browser$1,
   },
 };
 
@@ -3614,7 +3617,7 @@ const Observer = {
   },
   init() {
     const swiper = this;
-    if (!Support.observer || !swiper.params.observer) return;
+    if (!Support$1.observer || !swiper.params.observer) return;
     if (swiper.params.observeParents) {
       const containerParents = swiper.$el.parents();
       for (let i = 0; i < containerParents.length; i += 1) {
@@ -5165,9 +5168,9 @@ const Scrollbar = {
     } = swiper;
     const $el = scrollbar.$el;
     const target = $el[0];
-    const activeListener = Support.passiveListener && params.passiveListeners ? { passive: false, capture: false } : false;
-    const passiveListener = Support.passiveListener && params.passiveListeners ? { passive: true, capture: false } : false;
-    if (!Support.touch) {
+    const activeListener = Support$1.passiveListener && params.passiveListeners ? { passive: false, capture: false } : false;
+    const passiveListener = Support$1.passiveListener && params.passiveListeners ? { passive: true, capture: false } : false;
+    if (!Support$1.touch) {
       target.addEventListener(touchEventsDesktop.start, swiper.scrollbar.onDragStart, activeListener);
       document$1.addEventListener(touchEventsDesktop.move, swiper.scrollbar.onDragMove, activeListener);
       document$1.addEventListener(touchEventsDesktop.end, swiper.scrollbar.onDragEnd, passiveListener);
@@ -5185,9 +5188,9 @@ const Scrollbar = {
     } = swiper;
     const $el = scrollbar.$el;
     const target = $el[0];
-    const activeListener = Support.passiveListener && params.passiveListeners ? { passive: false, capture: false } : false;
-    const passiveListener = Support.passiveListener && params.passiveListeners ? { passive: true, capture: false } : false;
-    if (!Support.touch) {
+    const activeListener = Support$1.passiveListener && params.passiveListeners ? { passive: false, capture: false } : false;
+    const passiveListener = Support$1.passiveListener && params.passiveListeners ? { passive: true, capture: false } : false;
+    if (!Support$1.touch) {
       target.removeEventListener(touchEventsDesktop.start, swiper.scrollbar.onDragStart, activeListener);
       document$1.removeEventListener(touchEventsDesktop.move, swiper.scrollbar.onDragMove, activeListener);
       document$1.removeEventListener(touchEventsDesktop.end, swiper.scrollbar.onDragEnd, passiveListener);
@@ -5442,7 +5445,7 @@ const Zoom = {
     const { gesture } = zoom;
     zoom.fakeGestureTouched = false;
     zoom.fakeGestureMoved = false;
-    if (!Support.gestures) {
+    if (!Support$1.gestures) {
       if (e.type !== 'touchstart' || (e.type === 'touchstart' && e.targetTouches.length < 2)) {
         return;
       }
@@ -5470,7 +5473,7 @@ const Zoom = {
     const params = swiper.params.zoom;
     const zoom = swiper.zoom;
     const { gesture } = zoom;
-    if (!Support.gestures) {
+    if (!Support$1.gestures) {
       if (e.type !== 'touchmove' || (e.type === 'touchmove' && e.targetTouches.length < 2)) {
         return;
       }
@@ -5478,7 +5481,7 @@ const Zoom = {
       gesture.scaleMove = Zoom.getDistanceBetweenTouches(e);
     }
     if (!gesture.$imageEl || gesture.$imageEl.length === 0) return;
-    if (Support.gestures) {
+    if (Support$1.gestures) {
       zoom.scale = e.scale * zoom.currentScale;
     } else {
       zoom.scale = (gesture.scaleMove / gesture.scaleStart) * zoom.currentScale;
@@ -5496,11 +5499,11 @@ const Zoom = {
     const params = swiper.params.zoom;
     const zoom = swiper.zoom;
     const { gesture } = zoom;
-    if (!Support.gestures) {
+    if (!Support$1.gestures) {
       if (!zoom.fakeGestureTouched || !zoom.fakeGestureMoved) {
         return;
       }
-      if (e.type !== 'touchend' || (e.type === 'touchend' && e.changedTouches.length < 2 && !Device.android)) {
+      if (e.type !== 'touchend' || (e.type === 'touchend' && e.changedTouches.length < 2 && !Device$1.android)) {
         return;
       }
       zoom.fakeGestureTouched = false;
@@ -5519,7 +5522,7 @@ const Zoom = {
     const { gesture, image } = zoom;
     if (!gesture.$imageEl || gesture.$imageEl.length === 0) return;
     if (image.isTouched) return;
-    if (Device.android && e.cancelable) e.preventDefault();
+    if (Device$1.android && e.cancelable) e.preventDefault();
     image.isTouched = true;
     image.touchesStart.x = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.pageX;
     image.touchesStart.y = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.pageY;
@@ -5811,13 +5814,13 @@ const Zoom = {
     if (zoom.enabled) return;
     zoom.enabled = true;
 
-    const passiveListener = swiper.touchEvents.start === 'touchstart' && Support.passiveListener && swiper.params.passiveListeners ? { passive: true, capture: false } : false;
-    const activeListenerWithCapture = Support.passiveListener ? { passive: false, capture: true } : true;
+    const passiveListener = swiper.touchEvents.start === 'touchstart' && Support$1.passiveListener && swiper.params.passiveListeners ? { passive: true, capture: false } : false;
+    const activeListenerWithCapture = Support$1.passiveListener ? { passive: false, capture: true } : true;
 
     const slideSelector = `.${swiper.params.slideClass}`;
 
     // Scale image
-    if (Support.gestures) {
+    if (Support$1.gestures) {
       swiper.$wrapperEl.on('gesturestart', slideSelector, zoom.onGestureStart, passiveListener);
       swiper.$wrapperEl.on('gesturechange', slideSelector, zoom.onGestureChange, passiveListener);
       swiper.$wrapperEl.on('gestureend', slideSelector, zoom.onGestureEnd, passiveListener);
@@ -5840,13 +5843,13 @@ const Zoom = {
 
     swiper.zoom.enabled = false;
 
-    const passiveListener = swiper.touchEvents.start === 'touchstart' && Support.passiveListener && swiper.params.passiveListeners ? { passive: true, capture: false } : false;
-    const activeListenerWithCapture = Support.passiveListener ? { passive: false, capture: true } : true;
+    const passiveListener = swiper.touchEvents.start === 'touchstart' && Support$1.passiveListener && swiper.params.passiveListeners ? { passive: true, capture: false } : false;
+    const activeListenerWithCapture = Support$1.passiveListener ? { passive: false, capture: true } : true;
 
     const slideSelector = `.${swiper.params.slideClass}`;
 
     // Scale image
-    if (Support.gestures) {
+    if (Support$1.gestures) {
       swiper.$wrapperEl.off('gesturestart', slideSelector, zoom.onGestureStart, passiveListener);
       swiper.$wrapperEl.off('gesturechange', slideSelector, zoom.onGestureChange, passiveListener);
       swiper.$wrapperEl.off('gestureend', slideSelector, zoom.onGestureEnd, passiveListener);
@@ -7197,7 +7200,7 @@ const Cube = {
         $cubeShadowEl.transform(`scale3d(${scale1}, 1, ${scale2}) translate3d(0px, ${(swiperHeight / 2) + offset}px, ${-swiperHeight / 2 / scale2}px) rotateX(-90deg)`);
       }
     }
-    const zFactor = (Browser.isSafari || Browser.isUiWebView) ? (-swiperSize / 2) : 0;
+    const zFactor = (Browser$1.isSafari || Browser$1.isUiWebView) ? (-swiperSize / 2) : 0;
     $wrapperEl
       .transform(`translate3d(0px,0,${zFactor}px) rotateX(${swiper.isHorizontal() ? 0 : wrapperRotate}deg) rotateY(${swiper.isHorizontal() ? -wrapperRotate : 0}deg)`);
   },
@@ -7444,7 +7447,7 @@ const Coverflow = {
     }
 
     // Set correct perspective for IE10
-    if (Support.pointerEvents || Support.prefixedPointerEvents) {
+    if (Support$1.pointerEvents || Support$1.prefixedPointerEvents) {
       const ws = $wrapperEl[0].style;
       ws.perspectiveOrigin = `${center}px 50%`;
     }
@@ -7714,9 +7717,9 @@ var Thumbs$1 = {
 // Swiper Class
 
 const components = [
-  Device$1,
-  Support$1,
-  Browser$1,
+  Device,
+  Support,
+  Browser,
   Resize,
   Observer$1,
   Virtual$1,
@@ -7747,5 +7750,5 @@ if (typeof Swiper.use === 'undefined') {
 
 Swiper.use(components);
 
-export default Swiper;
+export { Swiper as default };
 //# sourceMappingURL=swiper.esm.bundle.js.map
